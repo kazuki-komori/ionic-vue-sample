@@ -6,8 +6,15 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <h1>Welcome To @ionic/vue</h1>
-      <img alt="Vue logo" src="../assets/logo.png">
+      <Alert />
     </ion-content>
   </div>
 </template>
+<script>
+  import Alert from "./Alert";
+  export default {
+    components:{
+      Alert
+    }
+  }
+</script>
