@@ -11,6 +11,7 @@ import '@ionic/core/css/ionic.bundle.css'
 
 Vue.use(Ionic)
 
+
 Vue.config.productionTip = false
 
 new Vue({

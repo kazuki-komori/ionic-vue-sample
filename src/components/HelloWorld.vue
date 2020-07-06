@@ -7,6 +7,7 @@
     </ion-header>
     <ion-content class="ion-padding">
       <Alert />
+      <router-link to="search">製品ページへ</router-link>
     </ion-content>
   </div>
 </template>

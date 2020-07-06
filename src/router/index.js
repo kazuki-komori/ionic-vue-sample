@@ -11,6 +11,11 @@ Vue.use(IonicVueRouter)
     name: 'Home',
     component: Home
   },
+    {
+    path: '/search',
+    name: 'Search',
+    component: () => import('../views/App/SearchPage')
+  },
   {
     path: '/about',
     name: 'About',
