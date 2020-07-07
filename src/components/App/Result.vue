@@ -1,6 +1,12 @@
 <template>
     <div>
-        <ion-button expand="block" @click="search(SearchVal)">検索</ion-button>
+        <ion-button expand="block" @click="search(SearchVal)" id="top">検索</ion-button>
+        <div v-if="valid.blank" class="valid">
+            検索ボックスに何か入力してください。
+        </div>
+        <div v-if="valid.error" class="valid">
+            {{valid.message}}
+        </div>
         <div v-if="data.length !== 0">
             <div v-for="(val, idx) in data" :key="idx">
                 <ion-card>
@@ -35,23 +41,43 @@
         },
         data(){
             return{
-                data: []
+                data: [],
+                valid: {
+                    error: false,
+                    blank: false,
+                    message: ''
+                }
             }
         },
         methods: {
             async search(val){
+                this.valid.blank = false
+                this.valid.error = false
                 //ローダーを作動
-                this.onload()
-                const searchVal = encodeURI(val)
-                const URL = `${process.env.VUE_APP_RAKUTEN_API_URL}&keyword=${searchVal}&hits=10&applicationId=${process.env.VUE_APP_APP_ID}`
-                try {
-                    const {data} = await axios.get(URL)
-                    this.data = this.editData(data)
-                    await true
-                    //ローダーを停止
+                await this.onload()
+                if (val === ''){
+                    this.valid.blank = true
+                    this.valid.error = true
                     this.offload()
-                } catch (e) {
-                    console.log(e)
+                        .catch((e) => {
+                            this.valid.error = true
+                            this.valid.message = e
+                        })
+                }
+                if (!this.valid.error){
+                    try {
+                        const searchVal = encodeURI(val)
+                        const URL = `${process.env.VUE_APP_RAKUTEN_API_URL}&keyword=${searchVal}&hits=15&applicationId=${process.env.VUE_APP_APP_ID}`
+                        const {data} = await axios.get(URL)
+                        this.data = this.editData(data)
+                        await true
+                        //ローダーを停止
+                        this.offload()
+                    } catch (e) {
+                        this.offload()
+                        this.valid.error = true
+                        this.valid.message = e
+                    }
                 }
             },
             editData(data){
@@ -64,7 +90,7 @@
                     }
                     obj.name = element.Item.itemName
                     obj.price = element.Item.itemPrice
-                    obj.image = element.Item.mediumImageUrls[0].imageUrl
+                    obj.image = element.Item.mediumImageUrls[0]?.imageUrl ?? ''
                     res.push(obj)
                 }
                 return res
@@ -85,7 +111,7 @@
         }
     }
 </script>
-<style>
+<style scoped>
     .cardPrice{
         font-size: 30px;
     }
@@ -94,5 +120,8 @@
     }
     ion-card-title{
         --color: red;
+    }
+    .valid{
+        color: red;
     }
 </style>
