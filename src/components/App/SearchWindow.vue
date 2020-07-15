@@ -6,7 +6,7 @@
                 <ion-back-button></ion-back-button>
             </ion-buttons>
         </ion-toolbar>
-        <ion-searchbar animated :value="value" @change="value = $event.target.value, input()"></ion-searchbar>
+        <ion-searchbar animated :value="value" @input="value = $event.target.value, input()"></ion-searchbar>
     </div>
 </template>
 <script>

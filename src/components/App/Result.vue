@@ -2,9 +2,11 @@
     <div>
         <ion-button expand="block" @click="search(SearchVal)" id="top">検索</ion-button>
         <div v-if="valid.blank" class="valid">
+<!--            検索ボックスが空欄の時-->
             検索ボックスに何か入力してください。
         </div>
         <div v-if="valid.error" class="valid">
+<!--            API系で何かしらのエラーが吐かれた時-->
             {{valid.message}}
         </div>
         <div v-if="data.length !== 0">
